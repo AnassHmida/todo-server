@@ -3,11 +3,7 @@ export interface IConfig {
   port: number;
   apiVersion: string;
   database: {
-    host: string;
-    port: number;
-    username: string;
-    password: string;
-    database: string;
+    uri: string;
   };
   jwt: {
     secret: string;
