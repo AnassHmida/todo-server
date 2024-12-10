@@ -6,10 +6,12 @@
     "start": "node dist/index.js",
     "dev": "nodemon -r dotenv/config src/index.ts",
     "build": "tsc",
-    "test": "jest --passWithNoTests",
+    "test": "jest --detectOpenHandles",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +31,8 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/jest": "^29.5.14",
+    "@types/mongoose": "^5.11.97",
+    "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "eslint": "^9.16.0",
@@ -37,9 +41,10 @@
     "husky": "^8.0.0",
     "jest": "^29.7.0",
     "lint-staged": "^15.2.11",
+    "mongodb-memory-server": "^10.1.2",
     "nodemon": "^3.1.7",
     "prettier": "^3.4.2",
-    "ts-jest": "^29.2.5",
-    "@types/mongoose": "^5.11.97"
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5"
   }
 }
