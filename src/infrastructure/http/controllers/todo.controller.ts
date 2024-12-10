@@ -1,33 +1,23 @@
 import { Request, Response } from 'express';
 import { Todo } from '../../../core/entities';
-import { IBaseController } from './base.controller';
+import { AuthRequest } from '../middleware/auth.middleware';
 
-export class TodoController implements IBaseController {
-  async getAll(req: Request, res: Response): Promise<void> {
+export class TodoController {
+  async getAll(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const todos = await Todo.find();
+      const todos = await Todo.find({ userId: req.user!.id });
       res.json(todos);
     } catch (error) {
       res.status(500).json({ message: 'Error fetching todos' });
     }
   }
 
-  async getById(req: Request, res: Response): Promise<void> {
+  async create(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const todo = await Todo.findById(req.params.id);
-      if (!todo) {
-        res.status(404).json({ message: 'Todo not found' });
-        return;
-      }
-      res.json(todo);
-    } catch (error) {
-      res.status(500).json({ message: 'Error fetching todo' });
-    }
-  }
-
-  async create(req: Request, res: Response): Promise<void> {
-    try {
-      const todo = new Todo(req.body);
+      const todo = new Todo({
+        ...req.body,
+        userId: req.user!.id
+      });
       await todo.save();
       res.status(201).json(todo);
     } catch (error) {
@@ -35,9 +25,13 @@ export class TodoController implements IBaseController {
     }
   }
 
-  async update(req: Request, res: Response): Promise<void> {
+  async update(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const todo = await Todo.findOneAndUpdate(
+        { _id: req.params.id, userId: req.user!.id },
+        req.body,
+        { new: true }
+      );
       if (!todo) {
         res.status(404).json({ message: 'Todo not found' });
         return;
@@ -48,16 +42,36 @@ export class TodoController implements IBaseController {
     }
   }
 
-  async delete(req: Request, res: Response): Promise<void> {
+  async delete(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const todo = await Todo.findByIdAndDelete(req.params.id);
+      const todo = await Todo.findOneAndDelete({ 
+        _id: req.params.id, 
+        userId: req.user!.id 
+      });
       if (!todo) {
         res.status(404).json({ message: 'Todo not found' });
         return;
       }
       res.status(204).send();
     } catch (error) {
-      res.status(500).json({ message: 'Error deleting todo' });
+      res.status(400).json({ message: 'Error deleting todo' });
+    }
+  }
+
+  async getById(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const todo = await Todo.findOne({ 
+        _id: req.params.id,
+        userId: req.user!.id 
+      });
+      
+      if (!todo) {
+        res.status(404).json({ message: 'Todo not found' });
+        return;
+      }
+      res.json(todo);
+    } catch (error) {
+      res.status(400).json({ message: 'Error fetching todo' });
     }
   }
 } 
