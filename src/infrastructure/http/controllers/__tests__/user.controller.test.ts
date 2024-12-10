@@ -34,11 +34,13 @@ describe('UserController', () => {
       await User.create({
         email: 'test@example.com',
         password: 'password123',
+        name: 'Test User'
       });
 
       mockRequest.body = {
         email: 'test@example.com',
         password: 'newpassword',
+        name: 'Another User'
       };
 
       await userController.register(mockRequest as Request, mockResponse as Response);
@@ -72,7 +74,8 @@ describe('UserController', () => {
       await userController.login(mockRequest as Request, mockResponse as Response);
       expect(mockResponse.json).toHaveBeenCalledWith(
         expect.objectContaining({
-          message: 'Login successful'
+          user: expect.any(Object),
+          token: expect.any(String)
         })
       );
     });

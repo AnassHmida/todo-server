@@ -8,38 +8,34 @@ export class UserController {
       
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        res.status(400).json({ message: 'Email already registered' });
+        res.status(400).json({ message: 'Email already exists' });
         return;
       }
 
       const user = new User({ email, password, name });
       await user.save();
 
-      res.status(201).json({ 
-        message: 'User registered successfully',
-        user: { email: user.email, name: user.name }
-      });
+      const token = user.generateAuthToken();
+      res.status(201).json({ user, token });
     } catch (error) {
-      res.status(500).json({ message: 'Error registering user' });
+      res.status(400).json({ message: 'Error registering user' });
     }
   }
 
   async login(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
-      
       const user = await User.findOne({ email });
-      if (!user || user.password !== password) {
+
+      if (!user || !(await user.comparePassword(password))) {
         res.status(401).json({ message: 'Invalid credentials' });
         return;
       }
 
-      res.json({ 
-        message: 'Login successful',
-        user: { email: user.email, name: user.name }
-      });
+      const token = user.generateAuthToken();
+      res.json({ user, token });
     } catch (error) {
-      res.status(500).json({ message: 'Error during login' });
+      res.status(400).json({ message: 'Error logging in' });
     }
   }
 
