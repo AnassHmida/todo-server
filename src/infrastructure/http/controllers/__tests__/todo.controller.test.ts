@@ -67,10 +67,11 @@ describe('TodoController', () => {
         userId: otherUserId,
         completed: false
       });
-
+    
       mockRequest.params = { id: todoDocument.id };
-      await todoController.getById(mockRequest as AuthRequest, mockResponse as Response);
-      expect(mockResponse.status).toHaveBeenCalledWith(404);
+      await expect(todoController.getById(mockRequest as AuthRequest, mockResponse as Response))
+        .rejects
+        .toThrow('Todo not found');
     });
   });
 
