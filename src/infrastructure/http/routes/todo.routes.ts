@@ -20,31 +20,20 @@ const todoController = new TodoController();
  *       type: object
  *       required:
  *         - title
+ *         - completed
  *         - userId
  *       properties:
  *         _id:
  *           type: string
- *           description: The auto-generated MongoDB ID
  *         title:
  *           type: string
- *           description: The title of the todo
  *           minLength: 1
  *           maxLength: 100
- *         description:
- *           type: string
- *           description: Optional description
- *           maxLength: 500
  *         completed:
  *           type: boolean
- *           description: Whether the todo is completed
  *           default: false
  *         userId:
  *           type: string
- *           description: The ID of the user who owns this todo
- *         dueDate:
- *           type: string
- *           format: date-time
- *           description: Optional due date
  *         createdAt:
  *           type: string
  *           format: date-time
