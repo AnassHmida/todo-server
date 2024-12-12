@@ -12,22 +12,16 @@ const TodoSchema = new Schema<TodoDocument>(
       required: true,
       trim: true,
     },
-    description: {
-      type: String,
-      trim: true,
-    },
     completed: {
       type: Boolean,
       default: false,
+      required: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-    },
-    dueDate: {
-      type: Date,
-    },
+    }
   },
   {
     timestamps: true,

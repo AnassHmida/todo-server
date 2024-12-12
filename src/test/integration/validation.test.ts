@@ -47,17 +47,16 @@ describe('Todo Validation', () => {
       expect(response.body.errors[0].message).toContain('less than 100 characters');
     });
 
-    it('should reject invalid date format', async () => {
+    it('should reject missing completed field', async () => {
       const response = await request(app)
         .post('/api/v1/todos')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          title: 'Valid Title',
-          dueDate: 'invalid-date'
+          title: 'Valid Title'
         });
 
       expect(response.status).toBe(400);
-      expect(response.body.errors[0].field).toContain('dueDate');
+      expect(response.body.errors[0].field).toContain('completed');
     });
   });
 
