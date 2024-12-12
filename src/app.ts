@@ -5,6 +5,8 @@ import { config } from './config/config';
 import { connectDatabase } from './infrastructure/database/connection';
 import routes from './infrastructure/http/routes';
 import { errorHandler } from './infrastructure/http/middleware/error.middleware';
+import swaggerUi from 'swagger-ui-express';
+import { specs } from './infrastructure/docs/swagger';
 
 const app = express();
 
@@ -26,5 +28,6 @@ app.get('/health', (req, res) => {
 
 app.use(apiPrefix, routes);
 app.use(errorHandler);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 export default app; 
