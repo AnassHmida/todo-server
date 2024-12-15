@@ -124,3 +124,41 @@ The documentation includes:
 - Error responses
 
 You can test the API endpoints directly through the Swagger UI interface.
+
+## Code Quality & Git Hooks
+
+This project uses several tools to ensure code quality:
+
+### Husky & Lint-staged
+Pre-commit hooks are configured using Husky to run tests and formatting before each commit. Configuration can be found in `.husky/pre-commit`.
+
+### ESLint & Prettier
+- ESLint enforces code quality rules
+- Prettier ensures consistent code formatting
+
+Available commands:
+```bash
+yarn lint     # Run ESLint
+yarn format   # Format code with Prettier
+```
+
+### TypeScript Configuration
+Strict type checking is enabled with the following compiler options:
+- Strict mode enabled
+- Source maps generation
+- ES2016 target
+- CommonJS modules
+- Experimental decorators
+- Decorator metadata emission
+
+See full configuration in `tsconfig.json`.
+
+### Testing
+Jest is configured for testing with the following commands:
+```bash
+yarn test           # Run all tests
+yarn test:watch     # Run tests in watch mode
+yarn test:coverage  # Generate coverage report
+```
+
+All tests must pass before commits are allowed.
