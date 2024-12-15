@@ -10,9 +10,8 @@ describe('Server Integration Tests', () => {
   beforeEach(async () => {
     testUserId = new mongoose.Types.ObjectId().toString();
     const testUser = await User.create({
-      email: 'test@example.com',
+      username: 'testuser',
       password: 'password123',
-      name: 'Test User',
       _id: new mongoose.Types.ObjectId(testUserId)
     });
     

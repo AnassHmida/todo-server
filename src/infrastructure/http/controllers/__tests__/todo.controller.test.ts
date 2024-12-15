@@ -18,7 +18,7 @@ describe('TodoController', () => {
       body: {},
       user: { 
         id: testUserId,
-        email: 'test@example.com'
+        username: 'testuser'
       }
     };
     mockResponse = {

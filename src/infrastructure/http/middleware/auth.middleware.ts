@@ -1,31 +1,40 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../../../config/config';
+import { AppError } from '../../../core/errors/app-error';
 
 export interface AuthRequest extends Request {
-  user?: {
+  user: {
     id: string;
-    email: string;
+    username: string;
   };
 }
 
 export const auth = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-
-    if (!token) {
-      res.status(401).json({ message: 'Authentication required' });
-      return;
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+      throw new AppError(401, 'Unauthorized - No token provided');
     }
 
-    const decoded = jwt.verify(token, config.jwt.secret) as { id: string; email: string };
-    req.user = decoded;
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, config.jwt.secret) as { id: string; username: string };
+
+    (req as AuthRequest).user = {
+      id: decoded.id,
+      username: decoded.username
+    };
+
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
+    if (error instanceof jwt.JsonWebTokenError) {
+      next(new AppError(401, 'Unauthorized - Invalid token'));
+    } else {
+      next(error);
+    }
   }
 }; 

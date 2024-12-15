@@ -17,9 +17,7 @@ const userController = new UserController();
  *       properties:
  *         id:
  *           type: string
- *         email:
- *           type: string
- *         name:
+ *         username:
  *           type: string
  *     AuthResponse:
  *       type: object
@@ -41,18 +39,16 @@ const userController = new UserController();
  *           schema:
  *             type: object
  *             required:
- *               - email
+ *               - username
  *               - password
- *               - name
  *             properties:
- *               email:
+ *               username:
  *                 type: string
- *                 format: email
+ *                 minLength: 3
+ *                 maxLength: 30
  *               password:
  *                 type: string
  *                 minLength: 6
- *               name:
- *                 type: string
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -61,7 +57,7 @@ const userController = new UserController();
  *             schema:
  *               $ref: '#/components/schemas/AuthResponse'
  *       400:
- *         description: Email already exists or validation error
+ *         description: Username already exists or validation error
  * 
  * /users/login:
  *   post:
@@ -74,12 +70,11 @@ const userController = new UserController();
  *           schema:
  *             type: object
  *             required:
- *               - email
+ *               - username
  *               - password
  *             properties:
- *               email:
+ *               username:
  *                 type: string
- *                 format: email
  *               password:
  *                 type: string
  *     responses:
@@ -95,7 +90,5 @@ const userController = new UserController();
 
 router.post('/register', userController.register);
 router.post('/login', userController.login);
-router.get('/profile', userController.getProfile);
-router.put('/profile', userController.updateProfile);
 
 export default router;
