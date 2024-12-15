@@ -44,19 +44,14 @@ const todoController = new TodoController();
  *       type: object
  *       required:
  *         - title
+ *         - completed
  *       properties:
  *         title:
  *           type: string
  *           minLength: 1
  *           maxLength: 100
- *         description:
- *           type: string
- *           maxLength: 500
  *         completed:
  *           type: boolean
- *         dueDate:
- *           type: string
- *           format: date-time
  *     UpdateTodoInput:
  *       type: object
  *       properties:
@@ -64,9 +59,6 @@ const todoController = new TodoController();
  *           type: string
  *           minLength: 1
  *           maxLength: 100
- *         description:
- *           type: string
- *           maxLength: 500
  *         completed:
  *           type: boolean
  *         dueDate:
